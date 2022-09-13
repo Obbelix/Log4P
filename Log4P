@@ -1,11 +1,5 @@
 function Log4P {
-    
-    Param(
-[Parameter(Mandatory=$true,ParameterSetName = 'Message')] [String[]]$Message,
-    [Parameter(Mandatory=$false)] [ValidateSet('INFO','WARNING','ERROR')] [String]$Level = "INFO",     
-        [Parameter(Mandatory=$false)] [String]$Path = "c:\temp",
-          [Parameter(Mandatory=$false)] [String]$FileName = "Logfile.log"
-<#
+    <#
         .VERSION
         1.0
 
@@ -37,7 +31,14 @@ function Log4P {
         PS> Log4P -Message "Logtext you want to write in log" -Level WARNING                     
 
         
-    #>                      
+    #> 
+    
+    Param(
+[Parameter(Mandatory=$true,ParameterSetName = 'Message')] [String[]]$Message,
+    [Parameter(Mandatory=$false)] [ValidateSet('INFO','WARNING','ERROR')] [String]$Level = "INFO",     
+        [Parameter(Mandatory=$false)] [String]$Path = "c:\temp",
+          [Parameter(Mandatory=$false)] [String]$FileName = "Logfile.log"
+                    
             
 )
 
