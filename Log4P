@@ -39,7 +39,7 @@ function Log4P {
     Param(
 [Parameter(Mandatory=$true,ParameterSetName = 'Message')] [String[]]$Message,
     [Parameter(Mandatory=$false)] [ValidateSet('INFO','WARNING','ERROR')] [String]$Level = "INFO",     
-        [Parameter(Mandatory=$false)] [String]$Path = "c:\temp",
+        [Parameter(Mandatory=$false)] [String]$Path = "c:\Log",
           [Parameter(Mandatory=$false)] [String]$FileName = "Logfile.log"
                     
             
