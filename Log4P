@@ -1,0 +1,89 @@
+function Log4P {
+    
+    Param(
+[Parameter(Mandatory=$true,ParameterSetName = 'Message')] [String[]]$Message,
+    [Parameter(Mandatory=$false)] [ValidateSet('INFO','WARNING','ERROR')] [String]$Level = "INFO",     
+        [Parameter(Mandatory=$false)] [String]$Path = "c:\temp",
+          [Parameter(Mandatory=$false)] [String]$FileName = "Logfile.log"
+<#
+        .VERSION
+        1.0
+
+        .NEW IN THIS VERSION
+        All
+
+        .NEXT VERSION
+        New feature: Possible to send mailmessage
+
+        .AUTHOR
+        Christer Obbarius
+
+        .SYNOPSIS
+        Add content to logfile.
+
+        .DESCRIPTION
+        Function for logging in Powershell.
+        Path to logfile can be set with variable ($LogFile) or Parameters ($Path , $FileName).
+        Set Time, Level and text i one line seoarated with | .
+        Fileextension will always be set to .log, replace the wanted extension and add if it be missed.
+        Create Folder and file if it dont exists or add content in it exists.
+                        
+
+        .EXAMPLE with functionparameters
+        PS> Log4P -Message "Logtext you want to write in log" -Level INFO -Path "c:\temp" -FileName "NameOfLogFile.log" 
+        
+        .EXAMPLE with variable 
+        PS> $LogFile = "C:\Doc\Log.LogFile.Log"
+        PS> Log4P -Message "Logtext you want to write in log" -Level WARNING                     
+
+        
+    #>                      
+            
+)
+
+# Check file extension and verify filename from function, Building filename
+if($LogFile -ne ""){$FileName = ""}
+    if($FileName -ne ""){
+        if($FileName -like '*.*'){}else{$FileName =$FileName+'.log'}
+        $Extension = [IO.Path]::GetExtension($FileName)
+if($Extension -eq $null){$FileName = $FileName+'.log'}
+else{
+    $FileExtension = $FileName.Substring($FileName.IndexOf('.')+1)
+if($FileExtension -ne 'log'){
+    $dot = $FileName.IndexOf('.')
+    $FileNamePrefix = $FileName.Substring(0,"$dot") 
+    $FileExtension = 'log'
+    $FileName = $FileNamePrefix+'.'+$FileExtension
+if($Path -match '\\$'){$LogFilePath = $Path+$FileName}else{
+    $LogFilePath = $Path+'\'+$FileName}
+}else{
+    $LogFilePath = $Path+'\'+$FileName 
+}}}
+
+# Check file extension and verify filename from variable, Building filename
+elseif($LogFile -ne $null){
+if($LogFile -like '*.*'){}else{$LogFile = $LogFile+'.log'}
+    $Extension = [IO.Path]::GetExtension($LogFile)
+if($Extension -eq $null){$LogFile = $LogFile + '.log'}
+else{
+    $FileExtension = $LogFile.Substring($LogFile.IndexOf('.')+1)
+if($FileExtension -ne 'log'){$FileExtension = 'log'
+    $dot = $LogFile.IndexOf('.')
+    $FileNamePrefix = $LogFile.Substring(0,"$dot") 
+    $FileExtension = 'log'
+    $LogFilePath = $FileNamePrefix+'.'+$FileExtension
+}}}
+
+# Check filepath and create folder+file if it not exists
+if(!$LogFilePath){}
+if(!(Test-Path -Path $LogFilePath)){    
+    $Leaf = Split-Path -Path $LogFilePath -Leaf
+    $Directory = Split-Path -Path $LogFilePath -Parent
+        New-Item -Path $Directory -ItemType directory -Force
+            New-Item -Path $Directory -ItemType file -Name $Leaf -Force
+}
+    # Add content to logfile  
+    $Date=Get-Date -Format 'yyyy-MM-dd HH:mm:ss:fff'
+    $Log=$Date+" "+"["+$Level+"]"+" "+$Message -replace '\r*\n',''    
+        Add-Content -Path $LogFilepath -Value $Log    
+    }
