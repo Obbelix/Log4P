@@ -28,7 +28,10 @@ function Log4P {
         
         .EXAMPLE with variable 
         PS> $LogFile = "C:\Doc\Log.LogFile.Log"
-        PS> Log4P -Message "Logtext you want to write in log" -Level WARNING                     
+        PS> Log4P -Message "Logtext you want to write in log" -Level WARNING   
+        
+        .LINK
+        https://github.com/Obbelix/Log4P/blob/main/Log4P
 
         
     #> 
